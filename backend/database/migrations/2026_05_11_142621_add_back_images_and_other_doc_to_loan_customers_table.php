@@ -1,0 +1,25 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('loan_customers', function (Blueprint $table) {
+            $table->string('adhaar_image_back')->nullable()->after('adhaar_image');
+            $table->string('voter_id_image_back')->nullable()->after('voter_id_image');
+            $table->string('other_name')->nullable()->after('passbook_image');
+            $table->string('other_document')->nullable()->after('other_name');
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('loan_customers', function (Blueprint $table) {
+            $table->dropColumn(['adhaar_image_back', 'voter_id_image_back', 'other_name', 'other_document']);
+        });
+    }
+};

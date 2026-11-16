@@ -1,0 +1,263 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* ===========================================
+   THEME VARIABLE MAPPING
+=========================================== */
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+/* ===========================================
+   🌿 GREEN THEME COLORS (Light Mode)
+=========================================== */
+:root {
+  --radius: 0.625rem;
+
+  /* Base Background */
+  --background: oklch(98% 0.01 255);          /* soft bluish white */
+  --foreground: oklch(0.28 0.03 255);         /* dark cool gray text */
+
+  /* Cards */
+  --card: oklch(100% 0 0);
+  --card-foreground: oklch(0.28 0.03 255);
+
+  /* Primary Brand — #6484DA */
+  --primary: oklch(0.62 0.14 260);             /* brand blue */
+  --primary-foreground: oklch(0.985 0 0);      /* white text */
+
+  /* Secondary (hover / outline / sidebar active bg) */
+  --secondary: oklch(0.72 0.10 260);           /* lighter blue */
+  --secondary-foreground: oklch(0.20 0.02 255);
+
+  /* Accent (CTA / highlights / badges) */
+  --accent: oklch(0.82 0.12 290);              /* violet-blue highlight */
+  --accent-foreground: oklch(0.20 0.02 255);
+
+  /* UI */
+  --border: oklch(0.92 0.01 255);
+  --muted-foreground: oklch(0.55 0.02 255);
+
+  /* Charts */
+  --color-value: oklch(0.62 0.14 260);      /* brand blue */
+  --color-current: var(--primary);
+  --color-target: oklch(0.96 0.01 255);     /* soft gray-blue */
+}
+
+
+
+
+/* ===========================================
+   TEXT STROKE EFFECT (used in banners)
+=========================================== */
+.stroke-text {
+  -webkit-text-stroke: 2px white;
+  color: var(--primary);
+}
+
+/* ===========================================
+   BASE STYLES
+=========================================== */
+@layer base {
+  * {
+    @apply border-border outline-none ring-0;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /* Optional: Add smooth scroll and selection color */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  ::selection {
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+}
+
+/* ===========================================
+   ACCESSIBILITY FOCUS STYLES
+=========================================== */
+@layer components {
+  /* Disable the focus ring globally */
+  *:focus {
+    @apply outline-none ring-0;
+  }
+
+  /* Keep hover green effect */
+  a:hover,
+  button:hover {
+    @apply text-primary;
+  }
+}
+
+
+/* Hide scrollbar but keep scroll functionality */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.inputBox {
+  @apply w-full border border-gray-300 rounded-md px-3 py-2 text-sm
+         bg-white text-gray-800
+         focus:outline-none focus:ring-2 focus:ring-gray-400
+         focus:border-gray-500 transition-all;
+}
+
+
+.custom-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+  background: #e6e6e6;
+  border-radius: 10px;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: #7ab67a;
+  border-radius: 10px;
+}
+
+
+/* -------------------- */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleUp {
+  0% { transform: scale(0.85); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes slideUp {
+  0% { transform: translateY(10px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes glow {
+  0% { box-shadow: 0 0 0px rgba(34, 197, 94, 0.3); }
+  50% { box-shadow: 0 0 15px rgba(34, 197, 94, 0.6); }
+  100% { box-shadow: 0 0 0px rgba(34, 197, 94, 0.3); }
+}
+
+@keyframes buttonPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.4s ease-out;
+}
+
+.animate-scaleUp {
+  animation: scaleUp 0.35s ease-out;
+}
+
+.animate-slideUp {
+  animation: slideUp 0.5s ease-out;
+}
+
+.animate-glow {
+  animation: glow 2s infinite ease-in-out;
+}
+
+.animate-buttonPulse {
+  animation: buttonPulse 2s infinite ease-in-out;
+}
+
+/* Custom Scrollbar Utility */
+.custom-scrollbar::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #cbd5e1;
+}
+
+
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    border: 2px solid transparent; /* creates padding effect */
+    background-clip: content-box;
+  }
+
+  .custom-scrollbar:hover::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.25);
+  }
+
+
+  /* ===========================================
+   PROFESSIONAL SIDEBAR SCROLLBAR
+=========================================== */
+
+.sidebar-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+}
+
+.sidebar-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.sidebar-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  transition: all 0.2s ease;
+}
+
+.sidebar-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+
+  
