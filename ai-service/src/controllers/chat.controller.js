@@ -58,10 +58,10 @@ export const chatController = async (req, res) => {
                 role: msg.role,
                 content: msg.content,
             })),
-            ...messages.map((msg) => ({
-                role: msg.role,
-                content: msg.content,
-            })),
+            {
+                role: "user",
+                content: userMessage,
+            },
         ];
 
         const aiResponse = await askLLM(llmMessages);

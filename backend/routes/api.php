@@ -62,6 +62,8 @@ use App\Http\Controllers\Api\Finance\FinanceDashboardController;
 use App\Http\Controllers\Api\Finance\FinanceTransactionController;
 use App\Http\Controllers\Api\SuperAdmin\DashboardController as SuperAdminDashboardController;
 use App\Http\Controllers\Api\Finance\CashBookController;
+use App\Http\Controllers\Api\AiController;
+use App\Http\Controllers\Api\AiLoanController;
 use Illuminate\Support\Facades\Route;
 
 // Public routes
@@ -644,3 +646,63 @@ Route::prefix('super-admin')->group(function () {
     Route::get('debug/branches', [\App\Http\Controllers\Api\SuperAdmin\DebugController::class, 'checkBranches']);
 });
     // -------------- Super Admin Dashboard APIs -------------- //
+
+/*
+|--------------------------------------------------------------------------
+| Laravel AI APIs
+|--------------------------------------------------------------------------
+|
+| APIs created specifically for AI Tool Calling integration.
+| These endpoints will be consumed by the Node.js AI service.
+|
+*/
+
+Route::middleware('auth:sanctum,employee')->prefix('ai')->group(function () {
+    Route::get('dashboard', [AiController::class, 'dashboard']);
+    Route::get('branches', [AiController::class, 'branches']);
+    Route::get('branch-summary', [AiController::class, 'branchSummary']);
+
+    Route::get('investments', [AiController::class, 'investments']);
+    Route::get('investments/{uniqueId}', [AiController::class, 'investmentDetail']);
+
+    Route::get('sales', [AiController::class, 'sales']);
+    Route::get('sales/{invoiceNo}', [AiController::class, 'saleDetail'])->where('invoiceNo', '.*');
+
+    Route::get('purchases', [AiController::class, 'purchases']);
+    Route::get('purchases/{uniqueId}', [AiController::class, 'purchaseDetail'])->where('uniqueId', '.*');
+
+    Route::get('bookings', [AiController::class, 'bookings']);
+
+    Route::get('customers', [AiController::class, 'customers']);
+    Route::get('customers/{customerUniqueId}', [AiController::class, 'customerDetail'])->where('customerUniqueId', '.*');
+
+    Route::get('payments', [AiController::class, 'payments']);
+
+    Route::prefix('loan')->group(function () {
+        Route::get('customers', [AiLoanController::class, 'customers']);
+        Route::get('customers/{customerId}/history', [AiLoanController::class, 'customerHistory'])->where('customerId', '.*');
+        Route::get('customers/{customerId}', [AiLoanController::class, 'customerDetail'])->where('customerId', '.*');
+
+        Route::get('caf', [AiLoanController::class, 'caf']);
+        Route::get('caf/{cafId}', [AiLoanController::class, 'cafDetail'])->where('cafId', '.*');
+
+        Route::get('pd', [AiLoanController::class, 'pd']);
+        Route::get('pd/{pdId}', [AiLoanController::class, 'pdDetail'])->where('pdId', '.*');
+
+        Route::get('cam', [AiLoanController::class, 'cam']);
+        Route::get('cam/{camId}', [AiLoanController::class, 'camDetail'])->where('camId', '.*');
+
+        Route::get('disbursements', [AiLoanController::class, 'disbursements']);
+        Route::get('disbursements/{disbursementId}', [AiLoanController::class, 'disbursementDetail'])->where('disbursementId', '.*');
+
+        Route::get('loans', [AiLoanController::class, 'loans']);
+        Route::get('loans/{loanId}/emi-schedule', [AiLoanController::class, 'loanEmiSchedule'])->where('loanId', '.*');
+        Route::get('loans/{loanId}', [AiLoanController::class, 'loanDetail'])->where('loanId', '.*');
+
+        Route::get('emis', [AiLoanController::class, 'emis']);
+        Route::get('emis/{emiId}/payment', [AiLoanController::class, 'emiPayment'])->where('emiId', '.*');
+        Route::get('emi-collections', [AiLoanController::class, 'emiCollections']);
+
+        Route::get('agents', [AiLoanController::class, 'agents']);
+    });
+});

@@ -1,11 +1,16 @@
+
 import express from "express";
 import cors from "cors";
 import "dotenv/config";
+
 import chatRoutes from "./routes/chat.routes.js";
-import { db } from "./db/index.js";
-import { conversations } from "./db/schema.js";
+import { testLaravelConnection } from "./services/laravel.service.js";
 
 const app = express();
+
+// ========================================
+// MIDDLEWARE
+// ========================================
 
 app.use(
   cors({
@@ -14,28 +19,47 @@ app.use(
   })
 );
 
-app.use(
-  express.json({
-    limit: "100kb",
-  })
-);
+// Log incoming requests
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.originalUrl}`);
+  next();
+});
+
+// Parse JSON requests
+app.use(express.json());
 
 // ========================================
-// ROOT HEALTH CHECK
+// LARAVEL CONNECTION TEST
 // ========================================
 
-app.get("/", (req, res) => {
-  res.json({
-    success: true,
-    message: "Anavaran AI Service is running",
-  });
+app.get("/api/ai/test-laravel", async (req, res) => {
+  try {
+    const result = await testLaravelConnection();
+
+    res.json({
+      success: true,
+      message: "Laravel connection successful",
+      data: result,
+    });
+  } catch (error) {
+    console.error(
+      "Laravel connection error:",
+      error.response?.data || error.message
+    );
+
+    res.status(error.response?.status || 500).json({
+      success: false,
+      message: "Laravel API connection failed",
+    });
+  }
 });
 
 // ========================================
-// AI ROUTES
+// AI CHAT ROUTES
 // ========================================
 
 app.use("/api/ai", chatRoutes);
+
 
 // ========================================
 // START SERVER
